@@ -17,7 +17,8 @@ microk8s helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboa
 microk8s helm repo update
 microk8s helm install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
   --namespace=kubernetes-dashboard \
-  --create-namespace
+  --create-namespace \
+  --wait
 microk8s kubectl apply -f configs/dashboard-sa.yml
 microk8s kubectl apply -f configs/dashboard-crb.yml
 microk8s kubectl apply -f configs/dashboard-secret.yml
