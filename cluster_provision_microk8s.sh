@@ -7,6 +7,7 @@ sudo microk8s status --wait-ready
 sudo usermod -a -G microk8s ubuntu
 sudo -u ubuntu newgrp microk8s
 echo "alias kubectl='microk8s kubectl'" | sudo tee -a /etc/bash.bashrc
+echo "alias helm='microk8s helm'" | sudo tee -a /etc/bash.bashrc
 microk8s enable rbac
 microk8s enable hostpath-storage
 microk8s enable ingress
