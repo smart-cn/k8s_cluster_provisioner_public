@@ -19,6 +19,7 @@ microk8s helm install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashb
   --namespace=kubernetes-dashboard \
   --create-namespace \
   --wait
+microk8s kubectl apply -f configs/dashboard-ingress.yml
 microk8s kubectl apply -f configs/dashboard-sa.yml
 microk8s kubectl apply -f configs/dashboard-crb.yml
 microk8s kubectl apply -f configs/dashboard-secret.yml
