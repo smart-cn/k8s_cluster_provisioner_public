@@ -32,6 +32,7 @@ microk8s helm install grafana grafana/grafana \
   --create-namespace \
   --set env.GF_SERVER_ROOT_URL="http://localhost/grafana/" \
   --wait
+microk8s kubectl apply -f configs/grafana-ingress.yml
 microk8s kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 -d > /home/ubuntu/secrets/grafana_token.txt
 sudo chown ubuntu:ubuntu /home/ubuntu/secrets
 sudo chown ubuntu:ubuntu /home/ubuntu/secrets/**
