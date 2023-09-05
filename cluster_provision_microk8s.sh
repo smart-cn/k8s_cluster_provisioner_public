@@ -42,3 +42,4 @@ microk8s kubectl apply -f configs/grafana-ingress.yml
 microk8s kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 -d > /home/ubuntu/secrets/grafana_token.txt
 sudo chown ubuntu:ubuntu /home/ubuntu/secrets
 sudo chown ubuntu:ubuntu /home/ubuntu/secrets/**
+wget -qO- https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz | tar zxvf -  -C /tmp/; sudo mv /tmp/k9s /usr/local/bin
