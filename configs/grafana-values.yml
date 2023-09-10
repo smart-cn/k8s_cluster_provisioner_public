@@ -1,3 +1,8 @@
+persistence:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 5Gi
 grafana.ini:
   server:
     root_url: http://localhost/grafana
