@@ -57,9 +57,9 @@ for i in {1..10}; do
     curl -X PUT -f -H 'Content-Type: application/json' -b /tmp/grafana-jar.txt -d "{\"homeDashboardId\":${dash_id}}" "http://$URL/grafana/api/org/preferences" && break || continue
 done
 mkdir  /home/ubuntu/.kube
-microk8s config -l > .kube/config
+microk8s config -l > /home/ubuntu/.kube/config
 sudo chown ubuntu:ubuntu /home/ubuntu/.kube
-sudo chown ubuntu:ubuntu /home/ubuntu/.kube/**
+sudo chown ubuntu:ubuntu /home/ubuntu/.kube/*
 sudo chown ubuntu:ubuntu /home/ubuntu/secrets
-sudo chown ubuntu:ubuntu /home/ubuntu/secrets/**
+sudo chown ubuntu:ubuntu /home/ubuntu/secrets/*
 wget -qO- https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz | tar zxvf -  -C /tmp/; sudo mv /tmp/k9s /usr/local/bin
