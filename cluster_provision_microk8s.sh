@@ -50,11 +50,11 @@ grafana_secret=$(cat /home/ubuntu/secrets/grafana_token.txt)
 for i in {1..10}; do
     sleep 2
     echo "Attempt ${i} of Grafana dashboard parameters setting"
-    curl -X POST -f -H 'Content-Type: application/json' -d "{\"user\":\"admin\",\"password\":\"${grafana_secret}\"}" -c /tmp/grafana/grafana-jar.txt "http://${URL}/grafana/login" || continue
-    dash_id=$(curl -sb /tmp/grafana/grafana-jar.txt "http://${URL}/grafana/api/search?mode=tree" | grep -Po '"id":(\d+)' | awk -F ':' '{print $2}')
+    curl -X POST -f -H 'Content-Type: application/json' -d "{\"user\":\"admin\",\"password\":\"${grafana_secret}\"}" -c /tmp/grafana-jar.txt "http://${URL}/grafana/login" || continue
+    dash_id=$(curl -sb /tmp/grafana-jar.txt "http://${URL}/grafana/api/search?mode=tree" | grep -Po '"id":(\d+)' | awk -F ':' '{print $2}')
     [ "${dash_id}" = "" ] && continue
-    curl -X POST -f -b /tmp/grafana/grafana-jar.txt "http://${URL}/grafana/api/user/stars/dashboard/${dash_id}" || continue
-    curl -X PUT -f -H 'Content-Type: application/json' -b /tmp/grafana/grafana-jar.txt -d "{\"homeDashboardId\":${dash_id}}" "http://$URL/grafana/api/org/preferences" && break || continue
+    curl -X POST -f -b /tmp/grafana-jar.txt "http://${URL}/grafana/api/user/stars/dashboard/${dash_id}" || continue
+    curl -X PUT -f -H 'Content-Type: application/json' -b /tmp/grafana-jar.txt -d "{\"homeDashboardId\":${dash_id}}" "http://$URL/grafana/api/org/preferences" && break || continue
 done
 mkdir  /home/ubuntu/.kube
 microk8s config -l > .kube/config
