@@ -35,6 +35,27 @@ microk8s helm install grafana grafana/grafana \
 microk8s kubectl apply -f configs/grafana-ingress.yml
 microk8s kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 -d > /home/ubuntu/secrets/grafana_token.txt
 mkdir .kube
+URL=$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)
+while true; do
+    response=$(curl -s -o /dev/null -w "%{http_code}" http://${URL}:80/grafana/api/health)
+    if [ "$response" == "200" ]; then
+        echo "Grafana is ready!"
+        break
+    else
+        echo "Waiting for Grafana..."
+        sleep 5
+    fi
+done
+grafana_secret=$(cat /home/ubuntu/secrets/grafana_token.txt)
+for i in {1..10}; do
+    sleep 2
+    echo "Attempt ${i} of Grafana dashboard parameters setting"
+    curl -X POST -f -H 'Content-Type: application/json' -d "{\"user\":\"admin\",\"password\":\"${grafana_secret}\"}" -c /tmp/grafana/grafana-jar.txt "http://${URL}/grafana/login" || continue
+    dash_id=$(curl -sb /tmp/grafana/grafana-jar.txt "http://${URL}/grafana/api/search?mode=tree" | grep -Po '"id":(\d+)' | awk -F ':' '{print $2}')
+    [ "${dash_id}" = "" ] && continue
+    curl -X POST -f -b /tmp/grafana/grafana-jar.txt "http://${URL}/grafana/api/user/stars/dashboard/${dash_id}" || continue
+    curl -X PUT -f -H 'Content-Type: application/json' -b /tmp/grafana/grafana-jar.txt -d "{\"homeDashboardId\":${dash_id}}" "http://$URL/grafana/api/org/preferences" && break || continue
+done
 microk8s config -l > .kube/config
 sudo chown ubuntu:ubuntu /home/ubuntu/.kube
 sudo chown ubuntu:ubuntu /home/ubuntu/.kube/**
