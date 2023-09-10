@@ -30,13 +30,7 @@ microk8s helm repo update
 microk8s helm install grafana grafana/grafana \
   --namespace=grafana \
   --create-namespace \
-  --set "datasources.datasources\\.yaml.apiVersion=1" \
-  --set "datasources.datasources\\.yaml.datasources[0].name=Prometheus" \
-  --set "datasources.datasources\\.yaml.datasources[0].type=prometheus" \
-  --set "datasources.datasources\\.yaml.datasources[0].url=http://kube-prom-stack-kube-prome-prometheus.observability.svc.cluster.local:9090" \
-  --set "datasources.datasources\\.yaml.datasources[0].access=proxy" \
-  --set "datasources.datasources\\.yaml.datasources[0].isDefault=true" \
-  --set env.GF_SERVER_ROOT_URL="http://localhost/grafana/" \
+  -f configs/grafana-values.yml \
   --wait
 microk8s kubectl apply -f configs/grafana-ingress.yml
 microk8s kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 -d > /home/ubuntu/secrets/grafana_token.txt

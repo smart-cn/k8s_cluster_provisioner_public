@@ -1,0 +1,12 @@
+grafana.ini:
+  server:
+    root_url: http://localhost/grafana
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://kube-prom-stack-kube-prome-prometheus.observability.svc.cluster.local:9090
+        access: proxy
+        isDefault: true
