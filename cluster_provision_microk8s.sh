@@ -56,6 +56,7 @@ for i in {1..10}; do
     curl -X POST -f -b /tmp/grafana/grafana-jar.txt "http://${URL}/grafana/api/user/stars/dashboard/${dash_id}" || continue
     curl -X PUT -f -H 'Content-Type: application/json' -b /tmp/grafana/grafana-jar.txt -d "{\"homeDashboardId\":${dash_id}}" "http://$URL/grafana/api/org/preferences" && break || continue
 done
+mkdir  /home/ubuntu/.kube
 microk8s config -l > .kube/config
 sudo chown ubuntu:ubuntu /home/ubuntu/.kube
 sudo chown ubuntu:ubuntu /home/ubuntu/.kube/**
