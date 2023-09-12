@@ -4,6 +4,8 @@ sudo apt update
 sudo apt upgrade -y
 sudo snap install microk8s --classic --channel=1.27
 sudo microk8s status --wait-ready
+sudo patch /var/snap/microk8s/current/certs/csr.conf.template < /tmp/microk8s_custom_domain.patch
+sudo microk8s refresh-certs --cert server.crt
 sudo usermod -a -G microk8s ubuntu
 sudo -u ubuntu newgrp microk8s
 echo "alias kubectl='microk8s kubectl'" | sudo tee -a /etc/bash.bashrc
