@@ -72,7 +72,8 @@ velero install \
     --bucket k8s-backups-home \
     --backup-location-config region=us-east-1 \
     --secret-file /home/ubuntu/secrets/.s3-creds \
-    --use-restic
+    --use-restic \
+    --kubeconfig /home/ubuntu/.kube/config    
 sudo chown ubuntu:ubuntu /home/ubuntu/secrets
 sudo chown ubuntu:ubuntu /home/ubuntu/secrets/*
 wget -qO- https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz | tar zxvf -  -C /tmp/; sudo mv /tmp/k9s /usr/local/bin
