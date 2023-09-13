@@ -58,6 +58,10 @@ for i in {1..10}; do
     curl -X POST -f -b /tmp/grafana-jar.txt "http://${URL}/grafana/api/user/stars/dashboard/${dash_id}" || continue
     curl -X PUT -f -H 'Content-Type: application/json' -b /tmp/grafana-jar.txt -d "{\"homeDashboardId\":${dash_id}}" "http://$URL/grafana/api/org/preferences" && break || continue
 done
+mkdir  /home/ubuntu/.kube
+microk8s config -l > /home/ubuntu/.kube/config
+sudo chown ubuntu:ubuntu /home/ubuntu/.kube
+sudo chown ubuntu:ubuntu /home/ubuntu/.kube/*
 cp /tmp/.s3-creds /home/ubuntu/secrets/
 test ! -d /tmp/velero/ && mkdir /tmp/velero/ || rm -rf /tmp/velero/ && mkdir /tmp/velero/; wget -qO- https://github.com/vmware-tanzu/velero/releases/download/v1.9.6/velero-v1.9.6-linux-amd64.tar.gz | tar zxvf - -C /tmp/velero/; sudo mv /tmp/velero/*/velero /usr/local/bin
 velero install \
@@ -69,10 +73,6 @@ velero install \
     --backup-location-config region=us-east-1 \
     --secret-file /home/ubuntu/secrets/.s3-creds \
     --use-restic
-mkdir  /home/ubuntu/.kube
-microk8s config -l > /home/ubuntu/.kube/config
-sudo chown ubuntu:ubuntu /home/ubuntu/.kube
-sudo chown ubuntu:ubuntu /home/ubuntu/.kube/*
 sudo chown ubuntu:ubuntu /home/ubuntu/secrets
 sudo chown ubuntu:ubuntu /home/ubuntu/secrets/*
 wget -qO- https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz | tar zxvf -  -C /tmp/; sudo mv /tmp/k9s /usr/local/bin
